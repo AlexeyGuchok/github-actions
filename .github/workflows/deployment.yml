@@ -28,9 +28,6 @@ jobs:
         run: npm run test
   lint:
     runs-on: ubuntu-latest
-    # по дефолту джобы запускаются одновременно в 3 потока, и не зависят друг от друга. для того, чтобы создать зависимость есть команда needs
-    # в needs мы указываем, что джоба lint зависит от джобы test, и явно говорим дождаться успешного выполнения test, а только потом выполнять lint
-    needs: test
     steps:
       - name: Get repository code
         uses: actions/checkout@v3
@@ -44,8 +41,11 @@ jobs:
       - name: Run lint validation
         run: npm run lint
   build:
-    runs-on: ubuntu-latest
-    needs: lint
+    runs-on:
+      ubuntu-latest
+      # по дефолту джобы запускаются одновременно в 3 потока, и не зависят друг от друга. для того, чтобы создать зависимость есть команда needs
+    # в needs мы указываем, что джоба lint зависит от джобы test, и явно говорим дождаться успешного выполнения test, а только потом выполнять lint
+    needs: [lint, test]
     steps:
       - name: Get repository code
         uses: actions/checkout@v3
