@@ -5,4 +5,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print context
-        run: echo "${{ github }}"
+        # https://docs.github.com/en/actions/learn-github-actions/expressions#functions здесь можно глянуть экспрешены
+        run: echo "${{ toJSON(github) }}"
