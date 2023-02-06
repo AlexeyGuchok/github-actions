@@ -2,6 +2,7 @@ name: Deploy React App
 on:
   push:
     branches:
+      # тригерить action когда мы делать git push из ветки master
       - "master"
       # не тригерить джобы если изменения были только в любых файлах папки [workflows]
     paths-ignore:
