@@ -5,8 +5,8 @@ on:
       # тригерить action когда мы делать git push из ветки master
       - "master"
       # не тригерить джобы если изменения были только в любых файлах папки [workflows]
-    paths-ignore:
-      - ".github/workflows/*"
+    # paths-ignore:
+    #   - ".github/workflows/*"
 jobs:
   test:
     runs-on: ubuntu-latest
