@@ -1,4 +1,4 @@
-name: Build
+name: Build and Deploy
 on: [push, workflow_dispatch]
 jobs:
   build-project:
@@ -17,3 +17,13 @@ jobs:
           name: my-artifact
           # path - указание папки build, в которую соберется проект
           path: build
+  deploy:
+    needs: build-project
+    runs-on: ubuntu-lates
+    steps:
+      -name: Get built project
+        # получаем доступ к нашей папке с билдом
+        uses: actions/download-artifact@v3
+        with:
+          # my-artifact - потому что на 17 строчке мы так назвали папку с билдом
+          name: my-artifact
