@@ -41,14 +41,27 @@ jobs:
       - name: Run lint validation
         run: npm run lint
   build:
-    runs-on:
-      ubuntu-latest
-      # по дефолту джобы запускаются одновременно в 3 потока, и не зависят друг от друга. для того, чтобы создать зависимость есть команда needs
+    # по дефолту джобы запускаются одновременно в 3 потока, и не зависят друг от друга. для того, чтобы создать зависимость есть команда needs
     # в needs мы указываем, что джоба lint зависит от джобы test, и явно говорим дождаться успешного выполнения test, а только потом выполнять lint
     needs: [lint, test]
+    # strategy позволяет проверить как наш проект будет работать на разных версиях ноды, а так же на разных операционных системах
+    strategy:
+      matrix:
+        # node-version и os - это переменные, мы придумали тх с головы. наша задачи протестировать билд на 14 и 16 ноде на убунту и винде
+        node-version: [14, 16]
+        os: [ubuntu-latest, windows-latest]
+    # т.е выше мы создали свой объект matrix с ключами node-version и os, и говорим github-actions запустить билд на ubuntu-latest и windows-latest.
+    # билд будет выполняться столько раз, сколько указано в массиве os
+    # !!!! ЗДЕСЬ МЫ ДЕЛАЕМ БИЛД ТОЛЬКО НА OS. ВЕРСИИ NODE УСТАНАВЛИВАЕМ ВРУЧНУЮ В STEPS ПЕРЕД УСТАНОВКОЙ МОДУЛЕЙ
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Get repository code
         uses: actions/checkout@v3
+        # ЗДЕСЬ МЫ УСТАНАВЛИВАЕМ УКАЗАННЫЕ В MATRIX NODE ВЕРСИИ
+      - name: Install NODE version
+        uses: uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
