@@ -19,11 +19,13 @@ jobs:
           path: build
   deploy:
     needs: build-project
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     steps:
       - name: Get built project
         # получаем доступ к нашей папке с билдом
         uses: actions/download-artifact@v3
         with:
           # my-artifact - потому что на 17 строчке мы так назвали папку с билдом
+          # после этого когда пройдет сборка, в этом github action-е появится 1 artefact - мы сможем скачать его в zip архиве и проверить, что это будет файлы нашего
+          # билда
           name: my-artifact
